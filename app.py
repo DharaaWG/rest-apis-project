@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
+
 from db import db
 from blocklist import BLOCKLIST
 
@@ -91,11 +92,6 @@ def create_app(db_url=None):
             401,
         )
 
-   
-    with app.app_context():
-        import models  
-
-       # db.create_all()
 
     api.register_blueprint(UserBlueprint)
     api.register_blueprint(ItemBlueprint)
