@@ -2,7 +2,6 @@ from flask import Flask, jsonify
 from flask_smorest import Api
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
-import os
 
 from db import db
 from blocklist import BLOCKLIST
@@ -23,7 +22,7 @@ def create_app(db_url=None):
     app.config[
         "OPENAPI_SWAGGER_UI_URL"
     ] = "https://cdn.jsdelivr.net/npm/swagger-ui-dist/"
-    app.config["SQLALCHEMY_DATABASE_URI"] =db_url or os.getenv("DATABASE_URL", "sqlite:///data.db")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_url or "sqlite:///data.db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["PROPAGATE_EXCEPTIONS"] = True
     db.init_app(app)
@@ -35,11 +34,10 @@ def create_app(db_url=None):
 
     # @jwt.additional_claims_loader
     # def add_claims_to_jwt(identity):
-    #     
+    #     # TODO: Read from a config file instead of hard-coding
     #     if identity == 1:
     #         return {"is_admin": True}
     #     return {"is_admin": False}
-
 
     @jwt.token_in_blocklist_loader
     def check_if_token_in_blocklist(jwt_header, jwt_payload):
